@@ -1,0 +1,7 @@
+base_url = "https://srrrp.github.io"
+title = "srrrp's blog"
+
+[extra]
+
+[markdown]
+highlight_code = false
