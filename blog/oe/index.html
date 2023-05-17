@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title> OCaml Setup in Emacs</title>
+    
+    <link rel="stylesheet" href="https://srrrp.github.io/style.css?h=ea2c3c596bdc26abd163">
+    
+</head>
+<body>
+    
+<header>
+    <p class="nav-head"><a class="nav-home" href="https:&#x2F;&#x2F;srrrp.github.io">home </a> / blogs</p>
+</header>
+
+    
+<main>
+    <h1>OCaml Setup in Emacs</h1>
+    
+    <p class="page-date">May 17, 2023</p>
+    
+    
+    <br>
+    <h3 id="install-ocaml">Install OCaml</h3>
+<ol>
+<li>Install opam binary</li>
+<li>Initialize opam</li>
+</ol>
+<pre><code>$ opam init
+</code></pre>
+<ol start="3">
+<li>Create switch</li>
+</ol>
+<pre><code>$ eval $(opam env -switch=default)
+</code></pre>
+<ol start="4">
+<li>Add this to <code>config.fish</code></li>
+</ol>
+<pre><code>eval $(opam env)
+</code></pre>
+<h3 id="install-packages">Install packages</h3>
+<ul>
+<li>dune</li>
+<li>utop</li>
+<li>merlin</li>
+<li>ocaml-lsp-server</li>
+</ul>
+<pre><code>$ opam install dune utop merlin ocaml-lsp-server
+</code></pre>
+<h3 id="setup-emacs">Setup Emacs</h3>
+<pre data-lang="el" class="language-el "><code class="language-el" data-lang="el">(use-package tuareg
+	:ensure t
+	:mode ((&quot;\\.ocamlinit\\&#x27;&quot; . tuareg-mode)))
+	
+(use-package merlin
+	:ensure t
+	:config
+	(add-hook &#x27;tuareg-mode-hook #&#x27;merlin-mode)
+	(add-hook &#x27;merlin-mode-hook #&#x27;company-mode))
+	
+(use-package merlin-eldoc
+	:ensure t
+	:hook ((tuareg-mode) . merlin-eldoc-setup))
+	
+(use-package flycheck-ocaml
+	:ensure t
+	:config
+	(flycheck-ocaml-setup))
+</code></pre>
+<h4 id="references">References</h4>
+<ol>
+<li><a href="https://batsov.com/articles/2022/08/23/setting-up-emacs-for-ocaml-development/">Setting up Emacs for OCaml Development</a></li>
+<li><a href="https://github.com/ocaml/tuareg">Tuareg</a></li>
+</ol>
+
+</main>
+
+</body>
+</html>

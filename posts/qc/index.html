@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title> Integrated Shrinking In QCheck</title>
+    
+    <link rel="stylesheet" href="https://srrrp.github.io/style.css?h=ea2c3c596bdc26abd163">
+    
+</head>
+<body>
+    
+<header>
+    <p class="nav-head"><a class="nav-home" href="https:&#x2F;&#x2F;srrrp.github.io">home </a> / blogs</p>
+</header>
+
+    
+<main>
+    <h1>Integrated Shrinking In QCheck</h1>
+    
+    <p class="page-date">July 21, 2021</p>
+    
+    
+    <br>
+    <p>In Property Based Testing (PBT) the programmer specifies desirable properties or invariants for the code under test, and uses a test framework to generate random inputs to find counter-example. For example. <em>&quot;a reversed list has the same size as the original list&quot;</em> which can be written as:</p>
+<pre data-lang="ml" class="language-ml "><code class="language-ml" data-lang="ml">fun l -&gt; List.length (List.reverse l) = List.length l
+</code></pre>
+<p>Imagine this test fails for the list <code>[42; 9079086709; -148; 9; -9876543210]</code>. Does this counter-example fail the test because there are 5 elements? Or because there are negative numbers? Or maybe due to the big numbers? Many reasons are possible.</p>
+<p>To help narrow down the cause of test failures, most PBT libraries provide a feature called <em>shrinking</em>. The idea is that once a test fails for a given input, the test engine will try less complex inputs, to find a minimal counter-example. In the example above, if shrinking reduces the minimal failing input to <code>[-1]</code> then the developer will more quickly find the root cause: most likely a problem with negative numbers.</p>
+<p>This post discusses a type of shrinking called <em>integrated shrinking</em> in OCaml — this feature has recently been merged into <a href="https://github.com/c-cube/qcheck">QCheck</a> and will appear in <a href="https://github.com/c-cube/qcheck/pull/116">QCheck2</a>.</p>
+<h4 id="shrinking-in-qcheck1">Shrinking in QCheck1</h4>
+<p>In QCheck1, the type of an arbitrary (used to generate and shrink input values) is equivalent to:</p>
+<pre data-lang="ml" class="language-ml "><code class="language-ml" data-lang="ml">type &#x27;a arbitrary = {
+    generate : Random.State.t -&gt; &#x27;a;
+    shrink : &#x27;a -&gt; (&#x27;a -&gt; unit) -&gt; unit
+}
+</code></pre>
+<ul>
+<li><code>generate</code> is used to generate random values</li>
+<li><code>shrink</code> is used in case of test failure to find a smaller counter-example</li>
+</ul>
+<p>If the second argument of <code>shrink</code> is unsettling, you can simply read it as &quot;the test to run again on smaller values.&quot; For example, to aggressively shrink (try all smaller numbers) on an <code>int</code>, one could implement <code>shrink</code> as such:</p>
+<pre data-lang="ml" class="language-ml "><code class="language-ml" data-lang="ml">let shrink bigger run_test =
+    for smaller = 0 to bigger -- 1 do
+    run_test smaller
+done
+</code></pre>
+<p>For convenience, it is never mandatory in QCheck1 to provide a shrinking function: the <code>shrink</code> field is therefore an <code>option</code>. By default, no shrinking is done.</p>
+
+</main>
+
+</body>
+</html>

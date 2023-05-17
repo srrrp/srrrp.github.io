@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://srrrp.github.io/</loc>
+    </url>
+    <url>
+        <loc>https://srrrp.github.io/about/</loc>
+    </url>
+    <url>
+        <loc>https://srrrp.github.io/blog/</loc>
+    </url>
+    <url>
+        <loc>https://srrrp.github.io/blog/oe/</loc>
+        <lastmod>2023-05-17</lastmod>
+    </url>
+    <url>
+        <loc>https://srrrp.github.io/posts/</loc>
+    </url>
+    <url>
+        <loc>https://srrrp.github.io/posts/markdown/</loc>
+        <lastmod>2021-07-30</lastmod>
+    </url>
+    <url>
+        <loc>https://srrrp.github.io/posts/qc/</loc>
+        <lastmod>2021-07-21</lastmod>
+    </url>
+</urlset>
